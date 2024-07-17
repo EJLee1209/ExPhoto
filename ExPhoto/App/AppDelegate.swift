@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  ExPhoto
 //
-//  Created by 이은재 on 7/17/24.
+//  Created by 굿소프트_이은재 on 6/18/24.
 //
 
 import UIKit
