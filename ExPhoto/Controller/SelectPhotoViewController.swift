@@ -27,12 +27,12 @@ final class SelectPhotoViewController: CommonViewController<SelectPhotoViewModel
     private let collectionView: UICollectionView = .init(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
-            .with
-            .scrollDirection(.vertical)
-            .minimumLineSpacing(1)
-            .minimumInteritemSpacing(0)
-            .itemSize(Const.cellSize)
-            .build()
+            .then {
+                $0.scrollDirection = .vertical
+                $0.minimumLineSpacing = 1
+                $0.minimumInteritemSpacing = 0
+                $0.itemSize = Const.cellSize
+            }
     )
     
     //MARK: - Properties
@@ -122,6 +122,8 @@ final class SelectPhotoViewController: CommonViewController<SelectPhotoViewModel
             self?.collectionView.reloadData()
         }
     }
+    
+    let dispatchGroup = DispatchGroup()
 }
 
 // MARK: - Actions
@@ -134,25 +136,31 @@ extension SelectPhotoViewController {
         let assets = selectedIndexArray.compactMap { idx in
             dataSource[idx].phAsset
         }
+        
         var selectedImages: [UIImage] = []
         assets.forEach { asset in
-            photoManager.fetchImage(phAsset: asset) { image in
+            dispatchGroup.enter()
+            photoManager.fetchImage(phAsset: asset) { [weak self] image in
                 if let image = image?.fixOrientation() {
                     selectedImages.append(image)
                 }
+                self?.dispatchGroup.leave()
             }
         }
         
-        if showEditController {
-            if let controller = EditPhotoViewController(viewModel: .init(), imageList: selectedImages) {
-                controller.modalPresentationStyle = .overFullScreen
-                controller.modalTransitionStyle = .crossDissolve
-                controller.delegate = self
-                self.present(controller, animated: true)
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            guard let self = self else { return }
+            if showEditController {
+                if let controller = EditPhotoViewController(viewModel: .init(), imageList: selectedImages) {
+                    controller.modalPresentationStyle = .overFullScreen
+                    controller.modalTransitionStyle = .crossDissolve
+                    controller.delegate = self
+                    self.present(controller, animated: true)
+                }
+            } else {
+                delegate?.finish(selectedImages: selectedImages)
+                dismiss(animated: true)
             }
-        } else {
-            delegate?.finish(selectedImages: selectedImages)
-            dismiss(animated: true)
         }
     }
 }

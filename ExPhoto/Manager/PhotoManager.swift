@@ -64,8 +64,8 @@ final class MyPhotoManager: NSObject, PhotoManager {
     ) {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
-        options.deliveryMode = .fastFormat
-        options.isSynchronous = false
+        options.deliveryMode = .highQualityFormat
+        options.isSynchronous = true
         
         imageManager.requestImage(
             for: phAsset,
@@ -85,7 +85,7 @@ final class MyPhotoManager: NSObject, PhotoManager {
     ) {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
-        options.isSynchronous = true
+        options.isSynchronous = false
         options.deliveryMode = .highQualityFormat
         
         imageManager.requestImageDataAndOrientation(

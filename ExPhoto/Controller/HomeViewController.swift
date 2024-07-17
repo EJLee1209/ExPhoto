@@ -13,11 +13,11 @@ class HomeViewController: CommonViewController<HomeViewModel> {
     private let collectionView: UICollectionView = .init(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
-            .with
-            .minimumLineSpacing(0)
-            .minimumInteritemSpacing(0)
-            .scrollDirection(.horizontal)
-            .build()
+            .then {
+                $0.minimumLineSpacing = 0
+                $0.minimumInteritemSpacing = 0
+                $0.scrollDirection = .horizontal
+            }
     )
     private lazy var selectPhotoBtn: UIButton = {
         let btn = UIButton(type: .system)

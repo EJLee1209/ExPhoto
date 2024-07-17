@@ -21,12 +21,12 @@ struct PhotoCellInfo {
 
 final class PhotoCollectionCell: UICollectionViewCell, Reusable {
     private let imageView: UIImageView = .init()
-        .with
-        .backgroundColor(.lightGray)
-        .isUserInteractionEnabled(false)
-        .contentMode(.scaleAspectFill)
-        .clipsToBounds(true)
-        .build()
+        .then {
+            $0.backgroundColor = .lightGray
+            $0.isUserInteractionEnabled = false
+            $0.contentMode = .scaleAspectFill
+            $0.clipsToBounds = true
+        }
     
     private let orderLabel: UILabel = {
         let label = UILabel()
@@ -40,9 +40,9 @@ final class PhotoCollectionCell: UICollectionViewCell, Reusable {
     }()
     
     private let highlightedView: UIView = .init()
-        .with
-        .backgroundColor(.white.withAlphaComponent(0.2))
-        .build()
+        .then {
+            $0.backgroundColor = .white.withAlphaComponent(0.2)
+        }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

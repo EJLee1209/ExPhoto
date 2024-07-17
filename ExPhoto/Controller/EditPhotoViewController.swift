@@ -57,18 +57,18 @@ final class EditPhotoViewController: CommonViewController<EditPhotoViewModel> {
     }()
     /// 이미지 인덱스
     private let imageIndexLabel: UILabel = .init()
-        .with
-        .font(.systemFont(ofSize: 14, weight: .semibold))
-        .text("10/10")
-        .textAlignment(.center)
-        .build()
+        .then {
+            $0.font = .systemFont(ofSize: 14, weight: .semibold)
+            $0.textAlignment = .center
+            $0.text = "1000/1000"
+        }
     /// 이미지 뷰
     private let imageView: UIImageView = .init()
-        .with
-        .backgroundColor(.systemGroupedBackground)
-        .contentMode(.scaleAspectFit)
-        .isUserInteractionEnabled(true)
-        .build()
+        .then {
+            $0.backgroundColor = .systemGroupedBackground
+            $0.contentMode = .scaleAspectFit
+            $0.isUserInteractionEnabled = true
+        }
     /// 사진 편집 프레임
     private var transparentRectView: TransparentRectView?
     /// 하단 컨텐츠 컨테이너
@@ -173,10 +173,10 @@ final class EditPhotoViewController: CommonViewController<EditPhotoViewModel> {
         layoutNavigationBar()
         navigationBar.setBackBtnIsHidden(true)
         let navTitleStackView = UIStackView(arrangedSubviews: [prevBtn, imageIndexLabel, nextBtn])
-            .with
-            .axis(.horizontal)
-            .spacing(12)
-            .build()
+            .then {
+                $0.axis = .horizontal
+                $0.spacing = 12
+            }
         imageIndexLabel.snp.makeConstraints { make in
             make.width.equalTo(imageIndexLabel.intrinsicContentSize.width + 4)
         }
@@ -219,11 +219,11 @@ final class EditPhotoViewController: CommonViewController<EditPhotoViewModel> {
             return ratioView
         }
         let stackView = UIStackView(arrangedSubviews: ratioViews)
-            .with
-            .axis(.horizontal)
-            .distribution(.equalSpacing)
-            .alignment(.bottom)
-            .build()
+            .then {
+                $0.axis = .horizontal
+                $0.distribution = .equalSpacing
+                $0.alignment = .bottom
+            }
         bottomContentContainerView.addSubview(stackView)
         stackView.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(40)
@@ -301,17 +301,17 @@ final class EditPhotoViewController: CommonViewController<EditPhotoViewModel> {
     private func makeRatioView(ratio: PhotoRatio) -> (PhotoRatioRectangle, UIView) {
         let rectangle = PhotoRatioRectangle()
         let label = UILabel()
-            .with
-            .font(.systemFont(ofSize: 12, weight: .medium))
-            .textAlignment(.center)
-            .text(ratio.rawValue)
-            .build()
+            .then {
+                $0.font = .systemFont(ofSize: 12, weight: .medium)
+                $0.textAlignment = .center
+                $0.text = ratio.rawValue
+            }
         let stackView: UIStackView = .init(arrangedSubviews: [rectangle, label])
-            .with
-            .axis(.vertical)
-            .spacing(4)
-            .alignment(.center)
-            .build()
+            .then {
+                $0.axis = .vertical
+                $0.spacing = 4
+                $0.alignment = .center
+            }
         let width: CGFloat
         let height: CGFloat
         switch ratio {

@@ -10,10 +10,7 @@ class TransparentRectView: UIView {
     //*******************************************************
     // MARK: - UI
     //*******************************************************
-    private let frameView: UIImageView = .init()
-        .with
-        .image(UIImage(named: "photo_edit_frame"))
-        .build()
+    private let frameView: UIImageView = .init(image: UIImage(named: "photo_edit_frame"))
     private var overlayLayer: CAShapeLayer?
     private var cornerViews: [UIView] = []
 

@@ -6,6 +6,7 @@
 //
 
 import Photos
+import Then
 
 protocol AlbumManager {
     func getAlbums(mediaType: MediaType, completion: @escaping ([AlbumInfo]) -> Void)
@@ -19,10 +20,10 @@ final class MyAlbumManager: AlbumManager {
         
         // 1. query 설정
         let fetchOptions = PHFetchOptions()
-            .with
-            .predicate(getPredicate(mediaType: mediaType))
-            .sortDescriptors(getSortDescriptors)
-            .build()
+            .then {
+                $0.predicate = getPredicate(mediaType: mediaType)
+                $0.sortDescriptors = getSortDescriptors
+            }
         
         // 2. standard 앨범을 query로 이미지 가져오기
         let standardFetchResult = PHAsset.fetchAssets(with: fetchOptions)
@@ -44,10 +45,10 @@ final class MyAlbumManager: AlbumManager {
             if phAssetCollection.estimatedAssetCount == NSNotFound {
                 // 쿼리를 날려서 가져오기
                 let fetchOptions = PHFetchOptions()
-                    .with
-                    .predicate(getPredicate(mediaType: mediaType))
-                    .sortDescriptors(getSortDescriptors)
-                    .build()
+                    .then {
+                        $0.predicate = self.getPredicate(mediaType: mediaType)
+                        $0.sortDescriptors = self.getSortDescriptors
+                    }
                 let fetchResult = PHAsset.fetchAssets(in: phAssetCollection, options: fetchOptions)
                 albums.append(.init(fetchResult: fetchResult, albumName: mediaType.title))
             }
